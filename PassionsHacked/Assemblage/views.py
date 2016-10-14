@@ -70,9 +70,16 @@ def create_group(request):
 
 def add_user_to_group(request):
 	try:
-		group_id = request.GET['group_id']
+		group_id = request.POST['group_id']
+
+		if 'user_id' in request.POST:
+			user_id = request.POST['user_id']
+			user = User.objects.get(id = user_id)
+		else:
+			user = request.user
+
 		group = Group.objects.get(id = group_id)
-		group.participants.add(request.user)
+		group.participants.add(user)
 		return HttpResponse("OK")
 	except:
 		return HttpResponse("Error")
@@ -134,6 +141,12 @@ def vote_negative_for_hotel(request):
 
 	return HttpResponse()
 
-def get_best_hotel_in_group(request):
+def get_ranked_hotels_in_group(request):
+	group_id = request.GET['group_id']
+	group = Group.objects.get(id = group_id)
+
+	# TODO: modify, not working
+	hotels = HotelInGroup.objects.filter(group__id = group_id).order_by('-negative_votes + positive_votes').all()
+	print(hotels)
 
 	return HttpResponse()

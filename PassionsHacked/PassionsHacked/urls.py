@@ -37,6 +37,6 @@ urlpatterns = [
     url(r'^autocomplete/', views.autocomplete, name='autocomplete'),
     url(r'^votePositiveForHotel/', views.vote_positive_for_hotel, name='vote_positive_for_hotel'),
     url(r'^voteNegativeForHotel/', views.vote_negative_for_hotel, name='vote_negative_for_hotel'),
-    url(r'^getBestHotelInGroup/', views.get_best_hotel_in_group, name='get_best_hotel_in_group'),
+    url(r'^getRankedHotelsInGroup/', views.get_ranked_hotels_in_group, name='get_ranked_hotels_in_group'),
 
 ]
