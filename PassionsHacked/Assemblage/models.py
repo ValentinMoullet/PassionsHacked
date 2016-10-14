@@ -6,18 +6,22 @@ from django.contrib.auth.models import User
 # Create your models here.
 
 class Group(models.Model):
-	id = models.AutoField(primary_key=True)
 	name = models.CharField(max_length=100)
 	destination = models.CharField(max_length=100)
 	creation_date = models.DateField(auto_now_add=True)
-	
+	from_date = models.DateField()
+	to_date = models.DateField()
+	participants = models.ManyToMany(User)
 
-class Profile(models.Model):
-	user = models.OneToOneField(User)
-	groups = models.ManyToMany(Group)
-	
-class Hotel:
-	id = models.AutoField(primary_key=True)
+class Block(models.Model):
 	creating_user = models.ForeignKey(User)
+	bookingcom_block_id = models.CharField(max_length=100)
+	group = models.ForeignKey(Group)
+	voters = models.ManyToMany(User)
+	positive_vote = models.IntegerField()
+	negative_vote = models.IntegerField()
+
+
+
 	
 
