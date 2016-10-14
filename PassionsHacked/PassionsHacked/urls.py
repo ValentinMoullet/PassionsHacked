@@ -30,8 +30,8 @@ urlpatterns = [
     url(r'^create_group$', views.create_group, name='create_group'),
     url(r'^add_user_to_group$', views.add_user_to_group, name='add_user_to_group'),
     url(r'^get_users_from_group$', views.get_users_from_group, name='get_users_from_group'),
-    url(r'^add_block_to_group$', views.add_block_to_group, name='add_block_to_group'),
-    url(r'^get_blocks_from_group$', views.get_blocks_from_group, name='get_blocks_from_group'),
+    url(r'^add_hotel_to_group$', views.add_hotel_to_group, name='add_hotel_to_group'),
+    url(r'^get_hotels_from_group$', views.get_hotels_from_group, name='get_hotels_from_group'),
 
     url(r'^getCountries$', views.get_countries, name='get_countries'),
     url(r'^autocomplete/', views.autocomplete, name='autocomplete')
