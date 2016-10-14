@@ -118,6 +118,34 @@ def get_hotels_from_group(request):
 	except:
 		return HttpResponse("Error")
 
+def positive_vote_for_hotel(request):
+	#try:
+		vote_for_hotel_internal(request, True)
+		return HttpResponse("OK")
+	#except:
+		return HttpResponse("Error")
+
+def negative_vote_for_hotel(request):
+	try:
+		vote_for_hotel_internal(request, False)
+		return HttpResponse("OK")
+	except:
+		return HttpResponse("Error")
+
+def vote_for_hotel_internal(request, isPositive):
+	hotel_id = request.GET['hotel_id']
+	hotel = HotelInGroup.objects.get(id = hotel_id)
+
+	if hotel.voters.filter(id = request.user.id).count() > 0:
+		raise ValueError("Already voted")
+
+	hotel.voters.add(request.user)
+	if isPositive:
+		hotel.positive_votes += 1
+	else:
+		hotel.negative_votes += 1
+	hotel.save()
+
 def autocomplete(request):
 	json_response = api.autocomplete(request)
 	return HttpResponse(json_response, content_type="application/json")
