@@ -29,4 +29,10 @@ urlpatterns = [
 
     url(r'^getCountries$', views.get_countries, name='get_countries'),
     url(r'^autocomplete/', views.autocomplete, name='autocomplete'),
+    url(r'^addHotelInGroup/', views.add_hotel_in_group, name='add_hotel_in_group'),
+    url(r'^getHotelInGroup/', views.get_hotel_in_group, name='get_hotel_in_group'),
+    url(r'^votePositiveForHotel/', views.vote_positive_for_hotel, name='vote_positive_for_hotel'),
+    url(r'^voteNegativeForHotel/', views.vote_negative_for_hotel, name='vote_negative_for_hotel'),
+    url(r'^getBestHotelInGroup/', views.get_best_hotel_in_group, name='get_best_hotel_in_group'),
+
 ]

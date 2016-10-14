@@ -54,3 +54,22 @@ def get_countries(request):
 	json_response = api.getCountries(request)
 	return HttpResponse(json_response, content_type="application/json")
 
+def add_hotel_in_group(request):
+
+	return HttpResponse()
+
+def get_hotels_in_group(request):
+
+	return HttpResponse()
+
+def positive_vote_for_hotel(request):
+
+	return HttpResponse()
+
+def positive_vote_for_hotel(request):
+
+	return HttpResponse()
+
+def get_best_hotel_in_group(request):
+
+	return HttpResponse()
