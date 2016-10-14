@@ -160,6 +160,7 @@ def vote_for_hotel_internal(request, isPositive):
 		hotel.positive_votes += 1
 	else:
 		hotel.negative_votes += 1
+	hotel.total_votes += 1
 	hotel.save()
 
 def autocomplete(request):
@@ -178,12 +179,11 @@ def vote_negative_for_hotel(request):
 
 	return HttpResponse()
 
-def get_ranked_hotels_in_group(request):
+def get_best_hotel_in_group(request):
 	group_id = request.GET['group_id']
 	group = Group.objects.get(id = group_id)
 
-	# TODO: modify, not working
-	hotels = HotelInGroup.objects.filter(group__id = group_id).order_by('-negative_votes + positive_votes').all()
-	print(hotels)
+	best_hotel = HotelInGroup.objects.filter(group__id = group_id).order_by('total_votes')[0]
+	print(best_hotel)
 
-	return HttpResponse()
+	return HttpResponse(serializers.serialize('json', best_hotel))

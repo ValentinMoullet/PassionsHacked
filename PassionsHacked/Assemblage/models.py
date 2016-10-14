@@ -22,7 +22,7 @@ class HotelInGroup(models.Model):
 	voters = models.ManyToManyField(User)
 	positive_votes = models.IntegerField()
 	negative_votes = models.IntegerField()
-
+	total_votes = models.IntegerField()
 
 
 	
