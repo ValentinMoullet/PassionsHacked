@@ -12,15 +12,24 @@ from models import *
 
 api = bookingapi.BookingAPI()
 
+def getParam(request, name):
+	if request.method == "GET":
+		qd = request.GET
+	else:
+		qd = request.POST
+	
+	return qd[name]
+
 def index(request):
 	return HttpResponse("Hello, world. You're at the polls index.")
 
 def echo(request):
-	return HttpResponse(request.GET['message'])
+	message = getParam(request, 'message')
+	return HttpResponse(message)
 
 def register(request):
-	username = request.GET['username']
-	password = request.GET['password']
+	username = getParam(request, 'username')
+	password = getParam(request, 'password')
 	try:
 		user = User.objects.create_user(username = username, password = password)
 	except:
@@ -28,8 +37,8 @@ def register(request):
 	return HttpResponse("OK")
 
 def signin(request):
-	username = request.GET['username']
-	password = request.GET['password']
+	username = getParam(request, 'username')
+	password = getParam(request, 'password')
 	user = authenticate(username = username, password = password)
 	if user is not None:
 		login(request, user)
@@ -53,10 +62,10 @@ def create_group(request):
 			raise ValueError("Not logged in")
  
 		# create new group
-		name = request.GET['name']
-		destination = request.GET['destination']
-		from_date = request.GET['from_date']
-		to_date = request.GET['to_date']
+		name = getParam(request, 'name')
+		destination = getParam(request, 'destination')
+		from_date = getParam(request, 'from_date')
+		to_date = getParam(request, 'to_date')
 		group = Group(name=name, destination=destination, from_date=from_date, to_date=to_date)
 		group.save()
 
@@ -70,7 +79,7 @@ def create_group(request):
 
 def add_user_to_group(request):
 	try:
-		group_id = request.GET['group_id']
+		group_id = getParam(request, 'group_id')
 		group = Group.objects.get(id = group_id)
 		group.participants.add(request.user)
 		return HttpResponse("OK")
@@ -79,7 +88,7 @@ def add_user_to_group(request):
 
 def get_users_from_group(request):
 	try:
-		group_id = request.GET['group_id']
+		group_id = getParam(request, 'group_id')
 		group = Group.objects.get(id = group_id)
 		members = group.participants.all()
 		return HttpResponse(serializers.serialize('json', members))
@@ -91,12 +100,12 @@ def add_hotel_to_group(request):
 		if request.user is None:
 			raise ValueError("Not logged in")
 
-		group_id = request.GET['group_id']
+		group_id = getParam(request, 'group_id')
 		group = Group.objects.get(id = group_id)
 
-		block_id = request.GET['block_id']
-		hotel_id = request.GET['hotel_id']
-		url = request.GET['url']
+		block_id = getParam(request, 'block_id')
+		hotel_id = getParam(request, 'hotel_id')
+		url = getParam(request, 'url')
 
 		hotelInGroup = HotelInGroup(creating_user=request.user, block_id=block_id, hotel_id=hotel_id, group=group, url=url, positive_votes=0, negative_votes=0	)
 		hotelInGroup.save()
@@ -110,7 +119,7 @@ def get_hotels_from_group(request):
 		if request.user is None:
 			raise ValueError("Not logged in")
 
-		group_id = request.GET['group_id']
+		group_id = getParam(request, 'group_id')
 		group = Group.objects.get(id = group_id)
 
 		hotels = HotelInGroup.objects.filter(group = group)
@@ -133,7 +142,7 @@ def negative_vote_for_hotel(request):
 		return HttpResponse("Error")
 
 def vote_for_hotel_internal(request, isPositive):
-	hotel_id = request.GET['hotel_id']
+	hotel_id = getParam(request, 'hotel_id')
 	hotel = HotelInGroup.objects.get(id = hotel_id)
 
 	if hotel.voters.filter(id = request.user.id).count() > 0:
