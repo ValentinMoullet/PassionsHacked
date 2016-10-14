@@ -14,7 +14,10 @@ def echo(request):
 def register(request):
 	username = request.GET['username']
 	password = request.GET['password']
-	user = User.objects.create_user(username = username, password = password)
+	try:
+		user = User.objects.create_user(username = username, password = password)
+	except:
+		return HttpResponse("Error")
 	return HttpResponse("OK")
 
 def signin(request):
