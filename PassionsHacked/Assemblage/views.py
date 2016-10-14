@@ -78,19 +78,45 @@ def add_user_to_group(request):
 		return HttpResponse("Error")
 
 def get_users_from_group(request):
-	#try:
+	try:
 		group_id = request.GET['group_id']
 		group = Group.objects.get(id = group_id)
 		members = group.participants.all()
 		return HttpResponse(serializers.serialize('json', members))
-	#except:
+	except:
 		return HttpResponse("Error")
 
-def add_block_to_group(request):
-	return HttpResponse("Not yet implemented")
+def add_hotel_to_group(request):
+	try:
+		if request.user is None:
+			raise ValueError("Not logged in")
 
-def get_blocks_from_group(request):
-	return HttpResponse("Not yet implemented")
+		group_id = request.GET['group_id']
+		group = Group.objects.get(id = group_id)
+
+		block_id = request.GET['block_id']
+		hotel_id = request.GET['hotel_id']
+		url = request.GET['url']
+
+		hotelInGroup = HotelInGroup(creating_user=request.user, block_id=block_id, hotel_id=hotel_id, group=group, url=url, positive_votes=0, negative_votes=0	)
+		hotelInGroup.save()
+
+		return HttpResponse(hotelInGroup.id)
+	except:
+		return HttpResponse("Error")
+
+def get_hotels_from_group(request):
+	try:
+		if request.user is None:
+			raise ValueError("Not logged in")
+
+		group_id = request.GET['group_id']
+		group = Group.objects.get(id = group_id)
+
+		hotels = HotelInGroup.objects.filter(group = group)
+		return HttpResponse(serializers.serialize('json', hotels))
+	except:
+		return HttpResponse("Error")
 
 def autocomplete(request):
 	json_response = api.autocomplete(request)
