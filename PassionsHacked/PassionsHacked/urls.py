@@ -27,10 +27,14 @@ urlpatterns = [
     url(r'^signout$', views.signout, name='signout'),
     url(r'^signtest$', views.signtest, name='signtest'),
 
+    url(r'^create_group$', views.create_group, name='create_group'),
+    url(r'^add_user_to_group$', views.add_user_to_group, name='add_user_to_group'),
+    url(r'^get_users_from_group$', views.get_users_from_group, name='get_users_from_group'),
+    url(r'^add_block_to_group$', views.add_block_to_group, name='add_block_to_group'),
+    url(r'^get_blocks_from_group$', views.get_blocks_from_group, name='get_blocks_from_group'),
+
     url(r'^getCountries$', views.get_countries, name='get_countries'),
     url(r'^autocomplete/', views.autocomplete, name='autocomplete'),
-    url(r'^addHotelInGroup/', views.add_hotel_in_group, name='add_hotel_in_group'),
-    url(r'^getHotelInGroup/', views.get_hotel_in_group, name='get_hotel_in_group'),
     url(r'^votePositiveForHotel/', views.vote_positive_for_hotel, name='vote_positive_for_hotel'),
     url(r'^voteNegativeForHotel/', views.vote_negative_for_hotel, name='vote_negative_for_hotel'),
     url(r'^getBestHotelInGroup/', views.get_best_hotel_in_group, name='get_best_hotel_in_group'),
