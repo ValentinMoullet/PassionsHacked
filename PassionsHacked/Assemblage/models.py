@@ -21,3 +21,5 @@ class HotelInGroup(models.Model):
 	group = models.ForeignKey(Group)
 	positive_voters = models.ManyToManyField(User, related_name='%(class)s_positive_voters')
 	negative_voters = models.ManyToManyField(User, related_name='%(class)s_negative_voters')
+	total_votes = models.IntegerField()
+

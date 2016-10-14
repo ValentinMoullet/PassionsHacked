@@ -78,7 +78,7 @@ def create_group(request):
 		return HttpResponse("Error")
 
 def get_groups_for_user(request):
-	for group in Group.objects.all()
+	groups = []
 
 	return HttpResponse(serializers.serialize('json', groups))
 
@@ -86,7 +86,9 @@ def add_user_to_group(request):
 	try:
 		group_id = getParam(request, 'group_id')
 		group = Group.objects.get(id = group_id)
-		group.participants.add(request.user)
+		user_id = getParam(request, 'user_id')
+		user = User.objects.get(id = user_id)
+		group.participants.add(user)
 		return HttpResponse("OK")
 	except:
 		return HttpResponse("Error")
@@ -132,14 +134,14 @@ def get_hotels_from_group(request):
 	except:
 		return HttpResponse("Error")
 
-def positive_vote_for_hotel(request):
+def vote_positive_for_hotel(request):
 	try:
 		vote_for_hotel_internal(request, True)
 		return HttpResponse("OK")
 	except:
 		return HttpResponse("Error")
 
-def negative_vote_for_hotel(request):
+def vote_negative_for_hotel(request):
 	try:
 		vote_for_hotel_internal(request, False)
 		return HttpResponse("OK")

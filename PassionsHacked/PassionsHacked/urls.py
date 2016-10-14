@@ -33,9 +33,11 @@ urlpatterns = [
     url(r'^get_users_from_group$', views.get_users_from_group, name='get_users_from_group'),
     url(r'^add_hotel_to_group$', views.add_hotel_to_group, name='add_hotel_to_group'),
     url(r'^get_hotels_from_group$', views.get_hotels_from_group, name='get_hotels_from_group'),
-    url(r'^positive_vote_for_hotel$', views.positive_vote_for_hotel, name='positive_vote_for_hotel'),
-    url(r'^negative_vote_for_hotel$', views.negative_vote_for_hotel, name='negative_vote_for_hotel'),
 
     url(r'^getCountries$', views.get_countries, name='get_countries'),
-    url(r'^autocomplete/', views.autocomplete, name='autocomplete')
+    url(r'^autocomplete/', views.autocomplete, name='autocomplete'),
+    url(r'^votePositiveForHotel/', views.vote_positive_for_hotel, name='vote_positive_for_hotel'),
+    url(r'^voteNegativeForHotel/', views.vote_negative_for_hotel, name='vote_negative_for_hotel'),
+    url(r'^getBestHotelInGroup/', views.get_best_hotel_in_group, name='get_best_hotel_in_group'),
+
 ]

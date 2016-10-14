@@ -5,11 +5,14 @@ BOOKINGCOM_API_URL = "https://hacker240:6PJfyQFLn4@distribution-xml.booking.com/
 class BookingAPI():
 
 	def get_countries(self, request):
-		return get_response("getCountries")
+		language_code = 'en'
+		params = {}
+		params['languagecode'] = language_code
+		return get_response("getCountries", params)
 
 	def autocomplete(self, request):
 		text = request.GET['text']
-		language_code = request.GET['languagecode']
+		language_code = 'en'
 		params = {}
 		params['text'] = text
 		params['languagecode'] = language_code
