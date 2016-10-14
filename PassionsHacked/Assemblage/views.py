@@ -2,6 +2,8 @@ from django.shortcuts import render
 from django.http import HttpResponse
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.models import User
+import json
+import bookingapi
 
 # Create your views here.
 
@@ -39,4 +41,9 @@ def signtest(request):
 		return HttpResponse("you are not signed in")
 	else:
 		return HttpResponse("Welcome " + request.user.username)
+
+def getCountries(request):
+	api = bookingapi.BookingAPI()
+	jsonResponse = api.getCountries()
+	return HttpResponse(json.dumps(jsonResponse))
 
