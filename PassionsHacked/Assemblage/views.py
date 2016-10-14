@@ -1,6 +1,8 @@
 from django.shortcuts import render
 from django.http import HttpResponse
 from django.contrib.auth import authenticate, login, logout
+import requests
+
 from django.contrib.auth.models import User
 
 # Create your views here.
@@ -39,4 +41,13 @@ def signtest(request):
 		return HttpResponse("you are not signed in")
 	else:
 		return HttpResponse("Welcome " + request.user.username)
+
+def autocomplete(request):
+	text = request.GET['text']
+	language_code = request.GET['languagecode']
+	data = {}
+	data['text'] = text
+	data['languagecode'] = language_code
+	return HttpResponse(requests.get(BOOKINGCOM_API_URL + '/autocomplete', data), content_type="application/json")
+
 
