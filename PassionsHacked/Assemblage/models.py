@@ -13,9 +13,11 @@ class Group(models.Model):
 	to_date = models.DateField()
 	participants = models.ManyToManyField(User)
 
-class Block(models.Model):
+class HotelInGroup(models.Model):
 	creating_user = models.ForeignKey(User, related_name='%(class)s_requests_created')
-	bookingcom_block_id = models.CharField(max_length=100)
+	block_id = models.CharField(max_length=100)
+	hotel_id = models.CharField(max_length=100)
+	url = models.CharField(max_length=200)
 	group = models.ForeignKey(Group)
 	voters = models.ManyToManyField(User)
 	positive_votes = models.IntegerField()
