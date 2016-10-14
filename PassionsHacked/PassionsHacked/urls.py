@@ -27,5 +27,5 @@ urlpatterns = [
     url(r'^signout$', views.signout, name='signout'),
     url(r'^signtest$', views.signtest, name='signtest'),
 
-    url(r'^getcountries$', views.getCountries, name='getCountries')
+    url(r'^getcountries$', views.get_countries, name='get_countries')
 ]

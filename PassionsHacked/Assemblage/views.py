@@ -42,8 +42,8 @@ def signtest(request):
 	else:
 		return HttpResponse("Welcome " + request.user.username)
 
-def getCountries(request):
+def get_countries(request):
 	api = bookingapi.BookingAPI()
-	jsonResponse = api.getCountries()
-	return HttpResponse(json.dumps(jsonResponse))
+	json_response = api.getCountries()
+	return HttpResponse(json.dumps(json_response))
 

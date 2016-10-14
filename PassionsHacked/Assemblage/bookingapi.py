@@ -2,9 +2,9 @@ import urllib2, base64, json
 
 class BookingAPI():
 	def getCountries(request):
-		return getResponse("getCountries")
+		return get_response("getCountries")
 
-def getResponse(func):
+def get_response(func):
 	url = "https://distribution-xml.booking.com/json/bookings." + func
 	apiUsername = "hacker240"
 	apiPassword = "6PJfyQFLn4"
