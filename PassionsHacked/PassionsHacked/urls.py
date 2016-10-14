@@ -27,7 +27,7 @@ urlpatterns = [
     url(r'^signout$', views.signout, name='signout'),
     url(r'^signtest$', views.signtest, name='signtest'),
 
-    url(r'^create_group$', views.create_group, name='create_group'),
+    url(r'^createGroup$', views.create_group, name='create_group'),
     url(r'^get_groups_for_user$', views.get_groups_for_user, name='get_groups_for_user'),
     url(r'^add_user_to_group$', views.add_user_to_group, name='add_user_to_group'),
     url(r'^get_users_from_group$', views.get_users_from_group, name='get_users_from_group'),

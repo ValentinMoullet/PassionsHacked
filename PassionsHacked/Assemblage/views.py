@@ -159,9 +159,21 @@ def vote_for_hotel_internal(request, isPositive):
 
 	if isPositive:
 		hotel.positive_voters.add(request.user)
+		hotel.total_votes += 1
 	else:
 		hotel.negative_voters.add(request.user)
+		hotel.total_votes -= 1
 	hotel.save()
+
+def get_best_hotel_in_group(request):
+    group_id = request.GET['group_id']
+    group = Group.objects.get(id = group_id)
+
+    best_hotel = HotelInGroup.objects.filter(group__id = group_id).order_by('total_votes')[0]
+    print(best_hotel)
+
+    return HttpResponse(serializers.serialize('json', best_hotel))
+
 
 def autocomplete(request):
 	json_response = api.autocomplete(request)
