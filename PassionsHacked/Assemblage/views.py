@@ -77,6 +77,11 @@ def create_group(request):
 	except:
 		return HttpResponse("Error")
 
+def get_groups_for_user(request):
+	for group in Group.objects.all()
+
+	return HttpResponse(serializers.serialize('json', groups))
+
 def add_user_to_group(request):
 	try:
 		group_id = getParam(request, 'group_id')
