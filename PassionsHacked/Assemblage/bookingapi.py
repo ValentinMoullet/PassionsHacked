@@ -1,16 +1,21 @@
-import urllib2, base64, json
+import urllib2, base64, json, requests
+
+BOOKINGCOM_API_URL = "https://hacker240:6PJfyQFLn4@distribution-xml.booking.com/json/bookings."
 
 class BookingAPI():
-	def getCountries(request):
+
+	def get_countries(self, request):
 		return get_response("getCountries")
 
-def get_response(func):
-	url = "https://distribution-xml.booking.com/json/bookings." + func
-	apiUsername = "hacker240"
-	apiPassword = "6PJfyQFLn4"
-	request = urllib2.Request(url)
-	base64string = base64.encodestring('%s:%s' % (apiUsername, apiPassword)).replace('\n', '')
-	request.add_header("Authorization", "Basic %s" % base64string)
-	result = urllib2.urlopen(request)
-	jsonResponse = result.read()
-	return json.loads(jsonResponse)
+	def autocomplete(self, request):
+		text = request.GET['text']
+		language_code = request.GET['languagecode']
+		params = {}
+		params['text'] = text
+		params['languagecode'] = language_code
+		return get_response("autocomplete", params)
+
+
+def get_response(func, params={}):
+	url = BOOKINGCOM_API_URL + func
+	return requests.get(url, params)

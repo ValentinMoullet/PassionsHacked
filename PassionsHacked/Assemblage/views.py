@@ -1,13 +1,16 @@
 from django.shortcuts import render
 from django.http import HttpResponse
 from django.contrib.auth import authenticate, login, logout
+import requests
 from django.contrib.auth.models import User
 from django.core import serializers
 import json
-from bookingapi import BookingAPI
+import bookingapi
 from models import *
 
 # Create your views here.
+
+api = bookingapi.BookingAPI()
 
 def index(request):
 	return HttpResponse("Hello, world. You're at the polls index.")
@@ -89,8 +92,11 @@ def add_block_to_group(request):
 def get_blocks_from_group(request):
 	return HttpResponse("Not yet implemented")
 
+def autocomplete(request):
+	json_response = api.autocomplete(request)
+	return HttpResponse(json_response, content_type="application/json")
+
 def get_countries(request):
-	api = bookingapi.BookingAPI()
-	json_response = api.getCountries()
-	return HttpResponse(json.dumps(json_response))
+	json_response = api.getCountries(request)
+	return HttpResponse(json_response, content_type="application/json")
 
