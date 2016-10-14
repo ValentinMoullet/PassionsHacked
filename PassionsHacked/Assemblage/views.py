@@ -107,7 +107,7 @@ def add_hotel_to_group(request):
 		hotel_id = getParam(request, 'hotel_id')
 		url = getParam(request, 'url')
 
-		hotelInGroup = HotelInGroup(creating_user=request.user, block_id=block_id, hotel_id=hotel_id, group=group, url=url, positive_votes=0, negative_votes=0	)
+		hotelInGroup = HotelInGroup(creating_user=request.user, block_id=block_id, hotel_id=hotel_id, group=group, url=url)
 		hotelInGroup.save()
 
 		return HttpResponse(hotelInGroup.id)
@@ -128,10 +128,10 @@ def get_hotels_from_group(request):
 		return HttpResponse("Error")
 
 def positive_vote_for_hotel(request):
-	#try:
+	try:
 		vote_for_hotel_internal(request, True)
 		return HttpResponse("OK")
-	#except:
+	except:
 		return HttpResponse("Error")
 
 def negative_vote_for_hotel(request):
@@ -145,14 +145,15 @@ def vote_for_hotel_internal(request, isPositive):
 	hotel_id = getParam(request, 'hotel_id')
 	hotel = HotelInGroup.objects.get(id = hotel_id)
 
-	if hotel.voters.filter(id = request.user.id).count() > 0:
-		raise ValueError("Already voted")
+	if hotel.positive_voters.filter(id = request.user.id).count() > 0:
+		raise ValueError("Already voted (positive)")
+	if hotel.negative_voters.filter(id = request.user.id).count() > 0:
+		raise ValueError("Already voted (negative)")
 
-	hotel.voters.add(request.user)
 	if isPositive:
-		hotel.positive_votes += 1
+		hotel.positive_voters.add(request.user)
 	else:
-		hotel.negative_votes += 1
+		hotel.negative_voters.add(request.user)
 	hotel.save()
 
 def autocomplete(request):

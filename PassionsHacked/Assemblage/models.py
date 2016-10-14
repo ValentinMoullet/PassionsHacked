@@ -19,11 +19,5 @@ class HotelInGroup(models.Model):
 	hotel_id = models.CharField(max_length=100)
 	url = models.CharField(max_length=200)
 	group = models.ForeignKey(Group)
-	voters = models.ManyToManyField(User)
-	positive_votes = models.IntegerField()
-	negative_votes = models.IntegerField()
-
-
-
-	
-
+	positive_voters = models.ManyToManyField(User, related_name='%(class)s_positive_voters')
+	negative_voters = models.ManyToManyField(User, related_name='%(class)s_negative_voters')
