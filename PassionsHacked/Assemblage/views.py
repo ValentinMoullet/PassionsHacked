@@ -158,9 +158,10 @@ def vote_for_hotel_internal(request, isPositive):
 	hotel.voters.add(request.user)
 	if isPositive:
 		hotel.positive_votes += 1
+		hotel.total_votes += 1
 	else:
 		hotel.negative_votes += 1
-	hotel.total_votes += 1
+		hotel.total_votes -= 1
 	hotel.save()
 
 def autocomplete(request):
