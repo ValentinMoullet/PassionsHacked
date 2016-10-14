@@ -4,6 +4,10 @@ from django.contrib.auth import authenticate, login, logout
 import requests
 
 from django.contrib.auth.models import User
+import json
+import bookingapi
+
+BOOKINGCOM_API_URL = "https://hacker240:6PJfyQFLn4@distribution-xml.booking.com/json/"
 
 # Create your views here.
 
@@ -48,6 +52,10 @@ def autocomplete(request):
 	data = {}
 	data['text'] = text
 	data['languagecode'] = language_code
-	return HttpResponse(requests.get(BOOKINGCOM_API_URL + '/autocomplete', data), content_type="application/json")
+	return HttpResponse(requests.get(BOOKINGCOM_API_URL + '/bookings.autocomplete', data), content_type="application/json")
 
+def get_countries(request):
+	api = bookingapi.BookingAPI()
+	jsonResponse = api.getCountries()
+	return HttpResponse(json.dumps(jsonResponse))
 

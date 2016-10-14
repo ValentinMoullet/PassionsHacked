@@ -25,5 +25,8 @@ urlpatterns = [
     url(r'^register$', views.register, name='register'),
     url(r'^signin$', views.signin, name='signin'),
     url(r'^signout$', views.signout, name='signout'),
-    url(r'^signtest$', views.signtest, name='signtest')
+    url(r'^signtest$', views.signtest, name='signtest'),
+
+    url(r'^getCountries$', views.get_countries, name='get_countries'),
+    url(r'^autocomplete/', views.autocomplete, name='autocomplete'),
 ]
