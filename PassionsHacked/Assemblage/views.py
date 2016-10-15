@@ -34,7 +34,7 @@ def register(request):
 	lastname = getParam(request, 'lastname')
 	try:
 		user = User.objects.create_user(username = username, password = password, first_name = firstname, last_name = lastname)
-		return HttpResponse(user.id)
+		return HttpResponse(serializers.serialize('json', user))
 	except:
 		return HttpResponse("Error")
 
@@ -44,7 +44,7 @@ def signin(request):
 	user = authenticate(username = username, password = password)
 	if user is not None:
 		login(request, user)
-		return HttpResponse(user.id)
+		return HttpResponse(serializers.serialize('json', user))
 	else:
 		return HttpResponse("Error")
 
@@ -130,6 +130,8 @@ def add_hotel_to_group(request):
 		block_id = getParam(request, 'block_id')
 		hotel_id = getParam(request, 'hotel_id')
 		url = getParam(request, 'url')
+		hotel_name = getParam(request, 'hotel_name')
+		hotel_rating = 
 
 		hotelInGroup = HotelInGroup(creating_user=request.user, block_id=block_id, hotel_id=hotel_id, group=group, url=url)
 		hotelInGroup.save()
