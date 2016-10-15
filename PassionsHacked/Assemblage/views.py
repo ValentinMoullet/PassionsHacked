@@ -168,7 +168,7 @@ def add_hotel_to_group(request):
 		hotel_rating = getParam(request, 'hotel_rating')
 		hotel_price = getParam(request, 'hotel_price')
 
-		hotelInGroup = HotelInGroup(creating_user=user, block_id=block_id, hotel_id=hotel_id, group=group, url=url, hotel_name=hotel_name, hotel_rating=hotel_rating, hotel_price=hotel_price)
+		hotelInGroup = HotelInGroup(creating_user=user, block_id=block_id, hotel_id=hotel_id, group=group, url=url, hotel_name=hotel_name, hotel_rating=hotel_rating, hotel_price=hotel_price, total_votes=0)
 		hotelInGroup.save()
 
 		return HttpResponse(hotelInGroup.id)
