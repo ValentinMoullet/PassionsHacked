@@ -222,6 +222,31 @@ def vote_for_hotel_internal(request, isPositive):
 		hotel.total_votes -= 1
 	hotel.save()
 
+def mark_user_done(request):
+	try:
+		user = get_user(request)
+		group_id = getParam(request, 'group_id')
+		group = Group.objects.get(id = group_id)
+		group.users_done.add(user)
+		return HttpResponse("OK")
+	except:
+		return HttpResponse("Error")
+
+def can_finalize(request):
+	try:
+		group_id = getParam(request, 'group_id')
+		group = Group.objects.get(id = group_id)
+
+		number_of_participants = group.participants.all().count()
+		number_of_users_done = group.users_done.all().count()
+
+		if number_of_participants == number_of_users_done:
+			return HttpResponse("true")
+		else:
+			return HttpResponse("false")
+	except:
+		return HttpResponse("Error")
+
 def get_best_hotel_in_group(request):
 	group_id = getParam(request, 'group_id')
 	group = Group.objects.get(id = group_id)

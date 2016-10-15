@@ -13,7 +13,8 @@ class Group(models.Model):
 	creation_date = models.DateField(auto_now_add=True)
 	from_date = models.DateField()
 	to_date = models.DateField()
-	participants = models.ManyToManyField(User)
+	participants = models.ManyToManyField(User, related_name='%(class)s_participants')
+	users_done = models.ManyToManyField(User, related_name='%(class)s_users_done')
 
 class HotelInGroup(models.Model):
 	creating_user = models.ForeignKey(User, related_name='%(class)s_requests_created')
