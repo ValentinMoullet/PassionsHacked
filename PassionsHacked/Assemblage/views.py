@@ -34,7 +34,7 @@ def register(request):
 	lastname = getParam(request, 'lastname')
 	try:
 		user = User.objects.create_user(username = username, password = password, first_name = firstname, last_name = lastname)
-		return user.id
+		return HttpResponse(user.id)
 	except:
 		return HttpResponse("Error")
 
