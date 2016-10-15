@@ -79,9 +79,10 @@ def create_group(request):
 		name = getParam(request, 'name')
 		dest_name = getParam(request, 'dest_name')
 		dest_id = getParam(request, 'dest_id')
+		dest_type = getParam(request, 'dest_type')
 		from_date = getParam(request, 'from_date')
 		to_date = getParam(request, 'to_date')
-		group = Group(name=name, dest_name=dest_name, dest_id=dest_id, from_date=from_date, to_date=to_date)
+		group = Group(name=name, dest_name=dest_name, dest_id=dest_id, dest_type=dest_type, from_date=from_date, to_date=to_date)
 		group.save()
 
 		# add currently logged in user to the participants list

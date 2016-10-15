@@ -9,6 +9,7 @@ class Group(models.Model):
 	name = models.CharField(max_length=100)
 	dest_name = models.CharField(max_length=100)
 	dest_id = models.CharField(max_length=50)
+	dest_type = models.CharField(max_length=50)
 	creation_date = models.DateField(auto_now_add=True)
 	from_date = models.DateField()
 	to_date = models.DateField()
