@@ -29,6 +29,7 @@ urlpatterns = [
 
     url(r'^createGroup$', views.create_group, name='create_group'),
     url(r'^get_groups_for_user$', views.get_groups_for_user, name='get_groups_for_user'),
+    url(r'^get_groups_for_user_2$', views.get_groups_for_user_2, name='get_groups_for_user_2'),
     url(r'^add_user_to_group$', views.add_user_to_group, name='add_user_to_group'),
     url(r'^get_users_from_group$', views.get_users_from_group, name='get_users_from_group'),
     url(r'^add_hotel_to_group$', views.add_hotel_to_group, name='add_hotel_to_group'),

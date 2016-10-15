@@ -1,5 +1,5 @@
 from django.shortcuts import render
-from django.http import HttpResponse
+from django.http import HttpResponse, JsonResponse
 from django.contrib.auth import authenticate, login, logout
 import requests
 from django.contrib.auth.models import User
@@ -55,7 +55,7 @@ def signin(request):
 	user = authenticate(username = username, password = password)
 	if user is not None:
 		login(request, user)
-		return HttpResponse(serializers.serialize('json', user))
+		return HttpResponse(serializers.serialize('json', [user])[1:-1])
 	else:
 		return HttpResponse("Error")
 
@@ -70,7 +70,7 @@ def signtest(request):
 		return HttpResponse("Welcome " + request.user.username)
 
 def create_group(request):
-	try:
+	#try:
 		user = get_user(request)
 		if user is None:
 			raise ValueError("Not logged in")
@@ -89,7 +89,7 @@ def create_group(request):
 		group.save()
 
 		return HttpResponse(group.id)
-	except:
+	#except:
 		return HttpResponse("Error")
 
 def get_groups_for_user(request):
@@ -106,6 +106,25 @@ def get_groups_for_user(request):
 
 		return HttpResponse(serializers.serialize('json', user_groups))
 	except:
+		return HttpResponse("Error")
+
+def get_groups_for_user_2(request):
+	#try:
+		user = get_user(request)
+		if user is None:
+			raise ValueError("Not logged in")
+
+		result = {}
+
+		for group in Group.objects.all():
+			if group.participants.filter(id = user.id).count() > 0:
+				res = {}
+				res['data'] = serializers.serialize('json', [group])[1:-1]
+				res['participants'] = serializers.serialize('json', group.participants.all())
+				result[group.id] = res
+
+		return JsonResponse(result)
+	#except:
 		return HttpResponse("Error")
 
 def add_user_to_group(request):
