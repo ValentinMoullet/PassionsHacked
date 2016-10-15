@@ -34,10 +34,9 @@ def register(request):
 	lastname = getParam(request, 'lastname')
 	try:
 		user = User.objects.create_user(username = username, password = password, first_name = firstname, last_name = lastname)
-		return 
+		return user.id
 	except:
 		return HttpResponse("Error")
-	return HttpResponse("OK")
 
 def signin(request):
 	username = getParam(request, 'username')
@@ -73,7 +72,7 @@ def create_group(request):
 		group = Group(name=name, dest_name=dest_name, dest_id=dest_id, from_date=from_date, to_date=to_date)
 		group.save()
 
-		# add currently logged in user to the particiants list
+		# add currently logged in user to the participants list
 		group.participants.add(request.user)
 		group.save()
 
@@ -82,17 +81,29 @@ def create_group(request):
 		return HttpResponse("Error")
 
 def get_groups_for_user(request):
-	groups = Group.objects.filter('u')
+	try:
+		if request.user is None:
+			raise ValueError("Not logged in")
 
+		user_groups = []
 
+		for group in Group.objects.all():
+			if group.participants.filter(id = request.user.id).count() > 0:
+				user_groups.append(group)
 
-	return HttpResponse(serializers.serialize('json', groups))
+		return HttpResponse(serializers.serialize('json', user_groups))
+	except:
+		return HttpResponse("Error")
 
 def add_user_to_group(request):
 	try:
 		group_id = getParam(request, 'group_id')
 		group = Group.objects.get(id = group_id)
 		user_id = getParam(request, 'user_id')
+
+		if group.participants.filter(id = user_id).count() > 0:
+			raise ValueError("Already added to the group")
+
 		user = User.objects.get(id = user_id)
 		group.participants.add(user)
 		return HttpResponse("OK")
