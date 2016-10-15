@@ -30,8 +30,11 @@ def echo(request):
 def register(request):
 	username = getParam(request, 'username')
 	password = getParam(request, 'password')
+	firstname = getParam(request, 'firstname')
+	lastname = getParam(request, 'lastname')
 	try:
-		user = User.objects.create_user(username = username, password = password)
+		user = User.objects.create_user(username = username, password = password, first_name = firstname, last_name = lastname)
+		return 
 	except:
 		return HttpResponse("Error")
 	return HttpResponse("OK")
@@ -63,10 +66,11 @@ def create_group(request):
  
 		# create new group
 		name = getParam(request, 'name')
-		destination = getParam(request, 'destination')
+		dest_name = getParam(request, 'dest_name')
+		dest_id = getParam(request, 'dest_id')
 		from_date = getParam(request, 'from_date')
 		to_date = getParam(request, 'to_date')
-		group = Group(name=name, destination=destination, from_date=from_date, to_date=to_date)
+		group = Group(name=name, dest_name=dest_name, dest_id=dest_id, from_date=from_date, to_date=to_date)
 		group.save()
 
 		# add currently logged in user to the particiants list
@@ -78,7 +82,9 @@ def create_group(request):
 		return HttpResponse("Error")
 
 def get_groups_for_user(request):
-	groups = []
+	groups = Group.objects.filter('u')
+
+
 
 	return HttpResponse(serializers.serialize('json', groups))
 
