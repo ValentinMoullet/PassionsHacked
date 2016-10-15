@@ -35,6 +35,7 @@ urlpatterns = [
     url(r'^add_hotel_to_group$', views.add_hotel_to_group, name='add_hotel_to_group'),
     url(r'^get_hotels_from_group$', views.get_hotels_from_group, name='get_hotels_from_group'),
     url(r'^markUserDone$', views.mark_user_done, name='mark_user_done'),
+    url(r'^isUserDone$', views.is_user_done, name='is_user_done'),
     url(r'^canFinalize$', views.can_finalize, name='can_finalize'),
 
     url(r'^getCountries$', views.get_countries, name='get_countries'),

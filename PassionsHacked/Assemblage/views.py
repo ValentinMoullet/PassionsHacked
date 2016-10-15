@@ -232,6 +232,19 @@ def mark_user_done(request):
 	except:
 		return HttpResponse("Error")
 
+def is_user_done(request):
+	try:
+		user = get_user(request)
+		group_id = getParam(request, 'group_id')
+		group = Group.objects.get(id = group_id)
+		isDone = group.users_done.filter(id = user.id).count() > 0
+		if isDone:
+			return HttpResponse("true")
+		else:
+			return HttpResponse("false")
+	except:
+		return HttpResponse("Error")
+
 def can_finalize(request):
 	try:
 		group_id = getParam(request, 'group_id')
