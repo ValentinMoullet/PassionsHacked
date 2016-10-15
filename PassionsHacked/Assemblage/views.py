@@ -45,7 +45,7 @@ def register(request):
 	lastname = getParam(request, 'lastname')
 	try:
 		user = User.objects.create_user(username = username, password = password, first_name = firstname, last_name = lastname)
-		return HttpResponse(serializers.serialize('json', user))
+		return HttpResponse(serializers.serialize('json', [user])[1:-1])
 	except:
 		return HttpResponse("Error")
 
@@ -55,7 +55,7 @@ def signin(request):
 	user = authenticate(username = username, password = password)
 	if user is not None:
 		login(request, user)
-		return HttpResponse(serializers.serialize('json', user))
+		return HttpResponse(serializers.serialize('json', [user])[1:-1])
 	else:
 		return HttpResponse("Error")
 
@@ -113,12 +113,12 @@ def add_user_to_group(request):
 	try:
 		group_id = getParam(request, 'group_id')
 		group = Group.objects.get(id = group_id)
-		user_id = getParam(request, 'user_id')
+		username = getParam(request, 'username')
 
-		if group.participants.filter(id = user_id).count() > 0:
+		if group.participants.filter(username = username).count() > 0:
 			raise ValueError("Already added to the group")
 
-		user = User.objects.get(id = user_id)
+		user = User.objects.get(username = username)
 		group.participants.add(user)
 		return HttpResponse("OK")
 	except:
