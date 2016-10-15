@@ -20,6 +20,17 @@ def getParam(request, name):
 	
 	return qd[name]
 
+def get_user_id(request):
+	if request.user is not None:
+		return request.user.id
+	else:
+		return getParam(request, 'user_id')
+
+def get_user(request):
+	user_id = get_user_id(request)
+	user = User.objects.get(id = user_id)
+	return user
+
 def index(request):
 	return HttpResponse("Hello, world. You're at the polls index.")
 
@@ -60,7 +71,8 @@ def signtest(request):
 
 def create_group(request):
 	try:
-		if request.user is None:
+		user = get_user(request)
+		if user is None:
 			raise ValueError("Not logged in")
  
 		# create new group
@@ -73,7 +85,7 @@ def create_group(request):
 		group.save()
 
 		# add currently logged in user to the participants list
-		group.participants.add(request.user)
+		group.participants.add(user)
 		group.save()
 
 		return HttpResponse(group.id)
@@ -82,13 +94,14 @@ def create_group(request):
 
 def get_groups_for_user(request):
 	try:
-		if request.user is None:
+		user = get_user(request)
+		if user is None:
 			raise ValueError("Not logged in")
 
 		user_groups = []
 
 		for group in Group.objects.all():
-			if group.participants.filter(id = request.user.id).count() > 0:
+			if group.participants.filter(id = user.id).count() > 0:
 				user_groups.append(group)
 
 		return HttpResponse(serializers.serialize('json', user_groups))
@@ -121,7 +134,8 @@ def get_users_from_group(request):
 
 def add_hotel_to_group(request):
 	try:
-		if request.user is None:
+		user = get_user(request)
+		if user is None:
 			raise ValueError("Not logged in")
 
 		group_id = getParam(request, 'group_id')
@@ -131,7 +145,7 @@ def add_hotel_to_group(request):
 		hotel_id = getParam(request, 'hotel_id')
 		url = getParam(request, 'url')
 
-		hotelInGroup = HotelInGroup(creating_user=request.user, block_id=block_id, hotel_id=hotel_id, group=group, url=url)
+		hotelInGroup = HotelInGroup(creating_user=user, block_id=block_id, hotel_id=hotel_id, group=group, url=url)
 		hotelInGroup.save()
 
 		return HttpResponse(hotelInGroup.id)
@@ -140,7 +154,8 @@ def add_hotel_to_group(request):
 
 def get_hotels_from_group(request):
 	try:
-		if request.user is None:
+		user = get_user(request)
+		if user is None:
 			raise ValueError("Not logged in")
 
 		group_id = getParam(request, 'group_id')
@@ -166,30 +181,32 @@ def vote_negative_for_hotel(request):
 		return HttpResponse("Error")
 
 def vote_for_hotel_internal(request, isPositive):
+	user = get_user(request)
+
 	hotel_id = getParam(request, 'hotel_id')
 	hotel = HotelInGroup.objects.get(id = hotel_id)
 
-	if hotel.positive_voters.filter(id = request.user.id).count() > 0:
+	if hotel.positive_voters.filter(id = user.id).count() > 0:
 		raise ValueError("Already voted (positive)")
-	if hotel.negative_voters.filter(id = request.user.id).count() > 0:
+	if hotel.negative_voters.filter(id = user.id).count() > 0:
 		raise ValueError("Already voted (negative)")
 
 	if isPositive:
-		hotel.positive_voters.add(request.user)
+		hotel.positive_voters.add(user)
 		hotel.total_votes += 1
 	else:
-		hotel.negative_voters.add(request.user)
+		hotel.negative_voters.add(user)
 		hotel.total_votes -= 1
 	hotel.save()
 
 def get_best_hotel_in_group(request):
-    group_id = request.GET['group_id']
-    group = Group.objects.get(id = group_id)
+	group_id = getParam(request, 'group_id')
+	group = Group.objects.get(id = group_id)
 
-    best_hotel = HotelInGroup.objects.filter(group__id = group_id).order_by('total_votes')[0]
-    print(best_hotel)
+	best_hotel = HotelInGroup.objects.filter(group__id = group_id).order_by('total_votes')[0]
+	print(best_hotel)
 
-    return HttpResponse(serializers.serialize('json', best_hotel))
+	return HttpResponse(serializers.serialize('json', best_hotel))
 
 
 def autocomplete(request):
