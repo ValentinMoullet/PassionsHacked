@@ -45,7 +45,7 @@ def register(request):
 	lastname = getParam(request, 'lastname')
 	try:
 		user = User.objects.create_user(username = username, password = password, first_name = firstname, last_name = lastname)
-		return HttpResponse(serializers.serialize('json', user))
+		return HttpResponse(serializers.serialize('json', [user])[1:-1])
 	except:
 		return HttpResponse("Error")
 
@@ -79,9 +79,10 @@ def create_group(request):
 		name = getParam(request, 'name')
 		dest_name = getParam(request, 'dest_name')
 		dest_id = getParam(request, 'dest_id')
+		dest_type = getParam(request, 'dest_type')
 		from_date = getParam(request, 'from_date')
 		to_date = getParam(request, 'to_date')
-		group = Group(name=name, dest_name=dest_name, dest_id=dest_id, from_date=from_date, to_date=to_date)
+		group = Group(name=name, dest_name=dest_name, dest_id=dest_id, dest_type=dest_type, from_date=from_date, to_date=to_date)
 		group.save()
 
 		# add currently logged in user to the participants list
@@ -131,12 +132,12 @@ def add_user_to_group(request):
 	try:
 		group_id = getParam(request, 'group_id')
 		group = Group.objects.get(id = group_id)
-		user_id = getParam(request, 'user_id')
+		username = getParam(request, 'username')
 
-		if group.participants.filter(id = user_id).count() > 0:
+		if group.participants.filter(username = username).count() > 0:
 			raise ValueError("Already added to the group")
 
-		user = User.objects.get(id = user_id)
+		user = User.objects.get(username = username)
 		group.participants.add(user)
 		return HttpResponse("OK")
 	except:
