@@ -21,7 +21,7 @@ def getParam(request, name):
 	return qd[name]
 
 def get_user_id(request):
-	if not request.user.is_authenticated:
+	if request.user.is_authenticated:
 		return request.user.id
 	else:
 		return getParam(request, 'user_id')
